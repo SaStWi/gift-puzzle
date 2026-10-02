@@ -1,0 +1,352 @@
+/* ========================================
+   The Archive — Puzzle Game Styles
+   Exact match of sastwi.github.io/gift-puzzle/
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600&display=swap');
+
+:root {
+  --bg-color: #0d1117;
+  --sidebar-bg: #161b22;
+  --border-color: #30363d;
+  --text-main: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --success: #2ea043;
+  --error: #f85149;
+  --highlight: #1f6feb;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-image: url('/Background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ======= SIDEBAR ======= */
+.sidebar {
+  width: 300px;
+  min-width: 300px;
+  background-color: rgba(22, 27, 34, 0.80);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.brand {
+  padding: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-family: 'Roboto Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.back-link {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+.back-link:hover { color: var(--accent); }
+
+.brand-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.archive-title {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lang-switcher select {
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.8rem;
+  outline: none;
+  cursor: pointer;
+  background: rgba(13, 17, 23, 0.8);
+  transition: border-color 0.2s;
+}
+.lang-switcher select:hover { border-color: var(--accent); }
+
+#reset-btn {
+  background: transparent;
+  border: 1px solid var(--error);
+  color: var(--error);
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: 0.05em;
+  transition: background 0.2s, color 0.2s;
+}
+#reset-btn:hover { background: var(--error); color: #fff; }
+
+/* Search */
+.search-container {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-container input {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-family: 'Roboto Mono', monospace;
+  box-sizing: border-box;
+  outline: none;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.search-container input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-container input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+}
+
+.search-container input.success {
+  border-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(46, 160, 67, 0.3);
+}
+
+.search-container input.error {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(248, 81, 73, 0.3);
+  animation: shake 0.35s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-4px); }
+  40%       { transform: translateX(4px); }
+  60%       { transform: translateX(-3px); }
+  80%       { transform: translateX(3px); }
+}
+
+/* Tab list */
+.tab-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex-grow: 1;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.tab-list::-webkit-scrollbar { width: 4px; }
+.tab-list::-webkit-scrollbar-track { background: transparent; }
+.tab-list::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 2px; }
+
+.tab-item {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.92rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-main);
+  user-select: none;
+}
+
+.tab-item:hover:not(.locked) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.tab-item.active {
+  background-color: rgba(88, 166, 255, 0.15);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-left: 3px solid var(--accent);
+  color: var(--accent);
+  padding-left: 17px; /* compensate for 3px border-left */
+}
+
+.tab-item.locked {
+  color: var(--text-muted);
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.tab-lock-icon {
+  font-size: 0.8em;
+  opacity: 0.5;
+}
+
+/* Progress bar at bottom of sidebar */
+.progress-bar-wrap {
+  padding: 10px 15px 12px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.progress-track {
+  height: 3px;
+  background: var(--border-color);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--success));
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0%;
+}
+
+.progress-label {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* ======= MAIN CONTENT ======= */
+.main-content {
+  flex-grow: 1;
+  padding: 40px;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+}
+
+.main-content::-webkit-scrollbar { width: 6px; }
+.main-content::-webkit-scrollbar-track { background: transparent; }
+.main-content::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+
+.content-box {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: rgba(13, 17, 23, 0.7);
+  padding: 40px;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(48, 54, 61, 0.5);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Tab panes */
+.tab-pane {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.tab-pane h1 {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-top: 0;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.tab-pane p {
+  line-height: 1.6;
+  font-size: 1.05rem;
+  margin-bottom: 1.5rem;
+}
+
+.tab-pane p strong {
+  color: #ffffff;
+}
+
+.system-msg {
+  background-color: rgba(88, 166, 255, 0.15);
+  backdrop-filter: blur(4px);
+  border-left: 4px solid var(--accent);
+  padding: 15px;
+  font-family: 'Roboto Mono', monospace;
+  margin: 20px 0;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Core dump / error style for archive 22 */
+.core-dump {
+  font-family: 'Roboto Mono', monospace;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 14px;
+  border-radius: 6px;
+  border-left: 3px solid var(--error);
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+/* QR Code */
+#qrcode {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .sidebar { width: 240px; min-width: 240px; }
+  .main-content { padding: 20px; }
+  .content-box { padding: 24px 20px; }
+}
+
+@media (max-width: 500px) {
+  body { flex-direction: column; height: auto; overflow: auto; }
+  .sidebar { width: 100%; min-width: unset; height: auto; max-height: 50vh; }
+  .tab-list { max-height: 200px; }
+  .main-content { height: auto; }
+}

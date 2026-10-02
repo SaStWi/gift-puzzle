@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Archive — CreativeLabs</title>
+  <meta name="description" content="A mysterious personal server with 24 locked vaults. Decrypt the archive by finding hidden clues woven into the logs." />
+  <meta name="vault-key" content="cypher" />
+  <link rel="stylesheet" href="./puzzle.css" />
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="brand">
+      <a href="/" class="back-link">← Back to Games</a>
+      <div class="brand-row">
+        <span class="archive-title">Archive_OS</span>
+        <div class="lang-switcher">
+          <select id="lang-select" onchange="window.changeLanguage(this.value)">
+            <option value="en">EN</option>
+            <option value="zh">ZH</option>
+            <option value="nl">NL</option>
+            <option value="sv">SV</option>
+            <option value="it">IT</option>
+            <option value="fr">FR</option>
+          </select>
+          <button id="reset-btn" title="Reset all progress">RESET</button>
+        </div>
+      </div>
+    </div>
+    <div class="search-container">
+      <input
+        type="text"
+        id="search-bar"
+        placeholder="Search / Enter Code..."
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+    <ul class="tab-list" id="tab-list"></ul>
+  </div>
+
+  <div class="main-content">
+    <div id="tab-container" class="content-box"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script type="module" src="./puzzle.js"></script>
+</body>
+</html>

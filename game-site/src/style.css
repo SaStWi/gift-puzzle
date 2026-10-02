@@ -1,0 +1,514 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600&display=swap');
+
+:root {
+  --bg-dark: #0d1117;
+  --card-bg: rgba(13, 17, 23, 0.7);
+  --border-locked: #30363d;
+  --border-unlocked: #58a6ff;
+  --border-completed: #2ea043;
+  --accent-gold: #d29922;
+  --text-main: #c9d1d9;
+  --text-muted: #8b949e;
+  --line-locked: #30363d;
+  --line-unlocked: #58a6ff;
+  --line-completed: #2ea043;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-dark);
+  background-image: url('/Background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5vh 2vw;
+  position: relative;
+  user-select: none;
+}
+
+#bg-canvas { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
+
+/* Starfield & Perspective Hex/Grid Background */
+/* Removed starfield and grid */
+
+/* Header Box */
+.header-box {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2vh 3vw;
+}
+
+.header-box h1 {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(1.3rem, 2.2vw, 2rem);
+  letter-spacing: 1px;
+  margin-bottom: 0.4vh;
+  font-weight: 800;
+}
+
+.header-box p {
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(0.7rem, 0.9vw, 0.9rem);
+  color: #94a3b8;
+  margin-bottom: 1vh;
+}
+
+.header-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: clamp(0.75rem, 0.95vw, 0.95rem);
+}
+
+.tokens {
+  font-family: 'Roboto Mono', monospace;
+  color: var(--accent-gold);
+  font-weight: bold;
+}
+
+.sandbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: color 0.2s;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.sandbox-label:hover {
+  color: #fff;
+}
+
+/* Main Tree Container */
+.tree-wrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1650px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1vh 0;
+}
+
+/* Top connector bar across the 3 main branches */
+.root-connector {
+  width: 66.66%;
+  height: 12px;
+  margin: 0 auto;
+  border-top: 2px solid var(--line-unlocked);
+  border-left: 2px solid var(--line-unlocked);
+  border-right: 2px solid var(--line-unlocked);
+  position: relative;
+}
+
+.root-connector::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 12px;
+  background: var(--line-unlocked);
+  transform: translateX(-50%);
+}
+
+/* 3 Main Columns */
+.branches-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5vw;
+  width: 100%;
+}
+
+.branch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Connector Lines inside each branch */
+.v-line {
+  width: 2px;
+  height: 1.4vh;
+  background: var(--line-locked);
+  transition: background 0.3s;
+}
+
+.v-line.unlocked {
+  background: var(--line-unlocked);
+}
+.v-line.completed {
+  background: var(--line-completed);
+}
+
+.h-split {
+  width: 50%;
+  height: 1.2vh;
+  border-top: 2px solid var(--line-locked);
+  border-left: 2px solid var(--line-locked);
+  border-right: 2px solid var(--line-locked);
+  transition: border-color 0.3s;
+}
+
+.h-split.unlocked {
+  border-color: var(--line-unlocked);
+}
+.h-split.completed {
+  border-color: var(--line-completed);
+}
+
+.sub-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6vw;
+  width: 100%;
+}
+
+/* Node Card Styling */
+.node {
+  background-color: rgba(13, 17, 23, 0.6);
+  background-blend-mode: multiply;
+  border: 1px solid var(--border-locked);
+  border-radius: 4px;
+  padding: 0.7vh 0.6vw;
+  text-align: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3vh;
+  text-decoration: none;
+}
+
+.node.tier-1 {
+  width: 140px;
+  padding: 1vh 0.8vw;
+}
+
+.node.tier-2 {
+  width: 92%;
+  margin: 0 auto;
+}
+
+.node.tier-3 {
+  width: 94%;
+  margin: 0 auto;
+}
+
+/* Tier 4 stacks pairs vertically so 24 nodes take the width of 12 */
+.leaf-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5vh;
+  width: 100%;
+}
+
+.node.tier-4 {
+  width: 95%;
+  padding: 0.45vh 0.3vw;
+}
+
+/* Unlocked vs Locked States */
+.node.unlocked {
+  border-color: var(--border-unlocked);
+  cursor: pointer;
+}
+.node.unlocked:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.node.unlocked:hover .node-title {
+  color: var(--border-unlocked);
+}
+
+.node.completed {
+  border-color: var(--border-completed);
+  cursor: pointer;
+}
+.node.completed:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.node.completed:hover .node-title {
+  color: var(--border-completed);
+}
+
+.node.purchasable {
+  border-style: dashed;
+  border-color: var(--text-muted);
+  cursor: pointer;
+}
+.node.purchasable:hover {
+  border-color: var(--accent-gold);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.node.locked {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.sandbox-active .node.locked,
+.sandbox-active .node.purchasable {
+  opacity: 0.95;
+  border-color: rgba(56, 189, 248, 0.5);
+  cursor: pointer;
+  pointer-events: auto;
+  border-style: solid;
+}
+
+.sandbox-active .v-line {
+  background: var(--line-unlocked);
+}
+
+.sandbox-active .h-split {
+  border-color: var(--line-unlocked);
+}
+
+.node-title {
+  font-size: clamp(0.75rem, 0.85vw, 0.9rem);
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 0 5px rgba(0,0,0,0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  transition: color 0.2s;
+  text-align: center;
+}
+
+.node-divider {
+  width: 90%;
+  height: 1px;
+  background: rgba(48, 54, 61, 0.6); /* very subtle dark line */
+  margin: 3px 0;
+}
+
+.node-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.55rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 3px;
+}
+.badge-soon {
+  background: rgba(88, 166, 255, 0.1);
+  color: var(--border-unlocked);
+  border: 1px solid rgba(88, 166, 255, 0.3);
+}
+.badge-completed {
+  background: rgba(46, 160, 67, 0.1);
+  color: var(--border-completed);
+  border: 1px solid rgba(46, 160, 67, 0.3);
+}
+.badge-unlocked {
+  background: rgba(88, 166, 255, 0.15);
+  color: var(--border-unlocked);
+  border: 1px solid rgba(88, 166, 255, 0.4);
+}
+.badge-buy {
+  background: rgba(210, 153, 34, 0.1);
+  color: var(--accent-gold);
+  border: 1px solid rgba(210, 153, 34, 0.3);
+}
+
+.tier-4 .node-title {
+  font-size: clamp(0.6rem, 0.7vw, 0.75rem);
+}
+
+.node-meta {
+  font-size: clamp(0.55rem, 0.7vw, 0.75rem);
+  color: var(--accent-gold);
+  font-family: 'Roboto Mono', monospace;
+  font-weight: bold;
+}
+
+.node.locked .node-meta {
+  color: var(--text-muted);
+}
+
+/* Footer */
+footer {
+  position: relative;
+  z-index: 2;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: 'Roboto Mono', monospace;
+  opacity: 0.6;
+}
+
+/* --- Auth UI Styles --- */
+
+.auth-btn {
+  background: rgba(13, 17, 23, 0.6);
+  border: 1px solid var(--border-locked);
+  color: var(--text-muted);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.75rem;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.auth-btn:hover {
+  color: #fff;
+  border-color: var(--border-unlocked);
+  background: rgba(88, 166, 255, 0.1);
+}
+
+.auth-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background-image: url('/Background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-modal-box {
+  background: rgba(13, 17, 23, 0.95);
+  border: 1px solid var(--border-unlocked);
+  border-radius: 8px;
+  padding: 40px;
+  width: 380px;
+  position: relative;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(88, 166, 255, 0.2);
+  text-align: center;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.auth-close {
+  position: absolute;
+  top: 15px; right: 20px;
+  background: none;
+  border: none;
+  color: #c9d1d9;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.auth-close:hover {
+  color: #ff5555;
+}
+
+.auth-title {
+  color: #fff;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+
+.auth-subtitle {
+  color: #c9d1d9;
+  font-size: 0.9rem;
+  margin-bottom: 25px;
+}
+
+.auth-input-group {
+  margin-bottom: 15px;
+}
+
+.auth-input-group input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-locked);
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.auth-input-group input:focus {
+  border-color: var(--border-unlocked);
+}
+
+.auth-msg {
+  display: block;
+  font-size: 0.75rem;
+  color: #ff5555;
+  margin-bottom: 15px;
+  min-height: 14px;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.auth-action-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.auth-action-btn.primary {
+  background: rgba(88, 166, 255, 0.15);
+  color: var(--border-unlocked);
+  border: 1px solid rgba(88, 166, 255, 0.4);
+}
+
+.auth-action-btn.primary:hover {
+  background: rgba(88, 166, 255, 0.3);
+}
+
+.auth-action-btn.secondary {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-locked);
+}
+
+.auth-action-btn.secondary:hover {
+  color: #fff;
+  border-color: #fff;
+}
+
+
+/* New UI Additions */
+#bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+.node-img { width: 100%; height: 80px; object-fit: cover; border-bottom: 1px solid var(--border-locked); }
+.profile-pic-container:hover .profile-pic-edit { opacity: 1 !important; }
+
+
+.node-meta { font-size: 0.7rem; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,1); }
+

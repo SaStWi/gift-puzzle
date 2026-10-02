@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "dev": "npm run dev --prefix game-site"
+  },
+  "dependencies": {
+    "mongodb": "^7.6.0"
+  }
+}

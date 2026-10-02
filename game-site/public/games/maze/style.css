@@ -1,0 +1,527 @@
+/* ═══════════════════════════════════════════════════════════════
+   THE LABYRINTH — style.css  (Framework v2)
+   ═══════════════════════════════════════════════════════════════ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #07080b;
+  color: #c9d1d9;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ─── SETTINGS UI ─────────────────────────────────────────── */
+#settings-ui {
+  position: fixed; inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+#settings-ui::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: url('/MainBackground.jpg') center/cover no-repeat;
+  filter: brightness(0.35) saturate(0.8);
+  z-index: 0;
+}
+
+.settings-panel {
+  position: relative;
+  z-index: 1;
+  background: rgba(13, 17, 23, 0.97);
+  border: 1px solid rgba(88, 166, 255, 0.3);
+  border-radius: 14px;
+  padding: 2.4rem 2.8rem;
+  max-width: 700px;
+  width: 95vw;
+  max-height: 95vh;
+  overflow-y: auto;
+  box-shadow: 0 0 80px rgba(88, 166, 255, 0.08), 0 0 0 1px rgba(88, 166, 255, 0.05);
+  animation: panelIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  scrollbar-width: thin;
+  scrollbar-color: #30363d transparent;
+}
+
+@keyframes panelIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.settings-panel h1 {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 2rem;
+  color: #58a6ff;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-shadow: 0 0 30px rgba(88, 166, 255, 0.4);
+  margin-bottom: 0.3rem;
+}
+
+.tagline {
+  font-size: 0.82rem;
+  color: #8b949e;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+/* ─── Config Grid ─── */
+.config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem 2.2rem;
+  margin-bottom: 1.8rem;
+}
+
+.config-item label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+  color: #58a6ff;
+  margin-bottom: 0.55rem;
+}
+
+.config-item input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: #30363d;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  margin-bottom: 0.4rem;
+}
+.config-item input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 17px; height: 17px;
+  border-radius: 50%;
+  background: #58a6ff;
+  border: 3px solid #0d1117;
+  box-shadow: 0 0 10px rgba(88, 166, 255, 0.55);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.config-item input[type=range]:hover::-webkit-slider-thumb {
+  transform: scale(1.25);
+  box-shadow: 0 0 18px rgba(88, 166, 255, 0.8);
+}
+
+.config-item select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background: #161b22;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+  border-radius: 7px;
+  font-size: 0.88rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  margin-bottom: 0.25rem;
+}
+.config-item select:focus { border-color: #58a6ff; }
+
+.slider-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.slider-val {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.75rem;
+  color: #e6edf3;
+}
+
+.slider-hint {
+  font-size: 0.65rem;
+  color: #484f58;
+  font-style: italic;
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid #21262d;
+  margin: 1.6rem 0;
+}
+
+/* ─── Mechanics grid ─── */
+.mechanics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 1.4rem;
+}
+
+.mechanic-card {
+  background: rgba(22, 27, 34, 0.8);
+  border: 1px solid #21262d;
+  border-radius: 8px;
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  transition: border-color 0.2s;
+}
+.mechanic-card:hover { border-color: #30363d; }
+
+.mc-icon {
+  font-size: 1.4rem;
+  margin-bottom: 0.2rem;
+}
+.mc-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e6edf3;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.mc-desc {
+  font-size: 0.72rem;
+  color: #6e7681;
+  line-height: 1.5;
+}
+
+.true-end-tip {
+  background: rgba(255, 215, 0, 0.05);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  font-size: 0.78rem;
+  color: #c9a14a;
+  margin-bottom: 1.6rem;
+  line-height: 1.5;
+}
+
+/* ─── Buttons ─── */
+.btn-row { display: flex; gap: 0.8rem; }
+
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, #1a4f8f 0%, #238636 100%);
+  color: #fff;
+  border: none;
+  padding: 15px 28px;
+  font-size: 1rem;
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  box-shadow: 0 4px 24px rgba(35, 134, 54, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background 0.2s;
+}
+.btn-primary:hover::before { background: rgba(255,255,255,0.07); }
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(35, 134, 54, 0.45);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  background: transparent;
+  color: #6e7681;
+  border: 1px solid #30363d;
+  padding: 15px 20px;
+  font-size: 0.85rem;
+  font-family: 'Roboto Mono', monospace;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: #8b949e; color: #c9d1d9; }
+
+/* ─── GAME HUD ─────────────────────────────────────────────── */
+#game-container {
+  position: fixed; inset: 0;
+  display: none;
+}
+
+canvas#game-canvas {
+  display: block;
+  position: absolute; inset: 0;
+}
+
+/* ─── Minimap ─── */
+#minimap-container {
+  position: fixed;
+  bottom: 18px; right: 18px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(88, 166, 255, 0.25);
+  border-radius: 6px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: auto; /* To click buttons */
+  transition: width 0.3s, height 0.3s;
+}
+
+.mm-controls {
+  padding: 4px;
+  display: flex;
+  gap: 4px;
+}
+.mm-controls button {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+.mm-controls button:hover { background: rgba(255,255,255,0.2); }
+
+.mm-wrapper {
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+canvas#minimap-canvas {
+  display: block;
+  image-rendering: pixelated;
+}
+
+/* Minimap States */
+#minimap-container.mm-normal .mm-wrapper { width: 180px; height: 180px; }
+#minimap-container.mm-normal canvas#minimap-canvas { width: 180px; height: 180px; }
+
+#minimap-container.mm-large .mm-wrapper { width: 360px; height: 360px; }
+#minimap-container.mm-large canvas#minimap-canvas { width: 360px; height: 360px; }
+
+#minimap-container.mm-closed .mm-wrapper { width: 0; height: 0; }
+#minimap-container.mm-closed canvas#minimap-canvas { width: 0; height: 0; }
+
+
+#hud {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: rgba(8, 9, 12, 0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(88, 166, 255, 0.15);
+  z-index: 50;
+  pointer-events: none;
+  min-height: 60px;
+}
+
+.hud-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hud-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(88, 166, 255, 0.22);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.8rem;
+  color: #58a6ff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+#trap-warn-pill {
+  border-color: rgba(255, 120, 0, 0.5);
+  box-shadow: 0 0 10px rgba(255,120,0,0.15);
+  animation: warnPulse 0.6s ease-in-out infinite alternate;
+}
+@keyframes warnPulse {
+  from { box-shadow: 0 0 6px rgba(255,120,0,0.15); }
+  to   { box-shadow: 0 0 18px rgba(255,120,0,0.4); }
+}
+
+.hud-icon { font-size: 1rem; }
+
+.hud-label {
+  font-size: 0.6rem;
+  color: #484f58;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.debuff {
+  font-size: 0.55rem;
+  padding: 2px 4px;
+  border-radius: 3px;
+  color: white;
+  font-family: monospace;
+}
+.debuff.slow { background: rgba(100, 100, 150, 0.8); }
+.debuff.freeze { background: rgba(100, 180, 255, 0.8); }
+.debuff.poison { background: rgba(80, 180, 50, 0.8); }
+
+.key-inventory {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.key-chip {
+  background: var(--kc);
+  color: #000;
+  font-size: 0.62rem;
+  font-weight: 800;
+  font-family: 'Roboto Mono', monospace;
+  padding: 3px 9px;
+  border-radius: 12px;
+  box-shadow: 0 0 8px var(--kc);
+  animation: chipPulse 1.8s infinite ease-in-out;
+}
+@keyframes chipPulse {
+  0%, 100% { box-shadow: 0 0 5px var(--kc); }
+  50%       { box-shadow: 0 0 14px var(--kc), 0 0 22px var(--kc); }
+}
+
+#quit-btn {
+  pointer-events: auto;
+  background: rgba(218, 54, 51, 0.12);
+  color: #f85149;
+  border: 1px solid rgba(218, 54, 51, 0.35);
+  padding: 7px 16px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+#quit-btn:hover {
+  background: rgba(218, 54, 51, 0.28);
+  border-color: #f85149;
+}
+
+/* ─── CONTROLS HINT ─── */
+#controls-hint {
+  position: fixed;
+  bottom: 18px; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 0.7rem;
+  color: #484f58;
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: 1px;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeControls 4s 1s both;
+}
+@keyframes fadeControls {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+#game-container.active #controls-hint { display: block; }
+
+/* ─── OVERLAYS ─────────────────────────────────────────────── */
+.overlay {
+  position: fixed; inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  pointer-events: none;
+}
+
+#death-overlay {
+  background: rgba(0,0,0,0);
+  transition: background 0.3s;
+}
+#death-overlay.active {
+  background: rgba(140, 10, 10, 0.5);
+  pointer-events: auto;
+}
+
+.overlay-text {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 3.2rem;
+  letter-spacing: 10px;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: scale(0.7);
+  pointer-events: none;
+}
+
+#death-overlay .overlay-text {
+  color: #ff4444;
+  text-shadow: 0 0 40px #ff0000, 0 0 80px #ff0000;
+  transition: opacity 0.3s, transform 0.3s;
+}
+#death-overlay.active .overlay-text { opacity: 1; transform: scale(1); }
+
+.overlay-sub {
+  font-size: 0.85rem;
+  font-family: 'Roboto Mono', monospace;
+  letter-spacing: 3px;
+  margin-top: 0.7rem;
+  opacity: 0;
+  color: #ff9999;
+  transition: opacity 0.3s 0.15s;
+}
+#death-overlay.active .overlay-sub { opacity: 0.7; }
+
+#win-overlay {
+  background: rgba(0,0,0,0);
+  opacity: 0;
+  transition: background 0.5s, opacity 0.5s;
+}
+#win-overlay.active {
+  background: rgba(0,0,0,0.78);
+  opacity: 1;
+  pointer-events: auto;
+}
+#win-overlay .overlay-text {
+  color: #2ea043;
+  text-shadow: 0 0 50px #2ea043, 0 0 100px #2ea043;
+  opacity: 1;
+  transform: scale(1);
+  animation: winPulse 1.8s infinite;
+}
+@keyframes winPulse {
+  0%, 100% { text-shadow: 0 0 50px #2ea043, 0 0 100px #2ea043; }
+  50%       { text-shadow: 0 0 80px #56d364, 0 0 150px #56d364; }
+}
+#win-overlay.active .overlay-text { opacity: 1; }
+#win-overlay.active .overlay-sub  { opacity: 0.6; }
+
+.win-tokens {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.5rem;
+  color: #ffd700;
+  text-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+  margin-top: 1rem;
+  animation: tokenGlow 2s infinite;
+}
+@keyframes tokenGlow {
+  0%, 100% { text-shadow: 0 0 20px rgba(255,215,0,0.5); }
+  50%       { text-shadow: 0 0 40px rgba(255,215,0,0.9), 0 0 70px rgba(255,165,0,0.4); }
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CreativeLabs</title>
+  <meta name="description" content="A collection of interactive web games and experiences." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <!-- Animated Background Canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Top Right Auth Button -->
+  <div id="site-auth-controls" style="position: absolute; top: 20px; right: 20px; z-index: 9999;">
+    <span id="site-user-display" style="color: var(--border-unlocked); font-family: 'Roboto Mono', monospace; font-size: 0.85rem; display: none; margin-right: 15px;"></span>
+    <button id="site-toggle-auth-btn" class="auth-btn">LOGIN</button>
+    <button id="site-logout-btn" class="auth-btn" style="display: none;">LOGOUT</button>
+  </div>
+
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="auth-modal-overlay" style="display: none;">
+    <div class="auth-modal-box">
+      <button id="auth-close-btn" class="auth-close">&times;</button>
+      
+      <!-- LOGIN VIEW -->
+      <div id="auth-login-view">
+        <h2 class="auth-title">SYSTEM_AUTH</h2>
+        <p class="auth-subtitle">Enter credentials to sync progress.</p>
+        
+        <div class="auth-input-group">
+          <input type="text" id="site-user" placeholder="Username" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="auth-input-group">
+          <input type="password" id="site-pass" placeholder="Password" />
+        </div>
+        
+        <span id="site-auth-msg" class="auth-msg"></span>
+
+        <div class="auth-actions">
+          <button id="site-login-btn" class="auth-action-btn primary">Login</button>
+          <button id="site-show-register-btn" class="auth-action-btn secondary">Register</button>
+        </div>
+      </div>
+
+      <!-- REGISTER VIEW -->
+      <div id="auth-register-view" style="display: none;">
+        <h2 class="auth-title">CREATE_ID</h2>
+        <p class="auth-subtitle">Initialize your Archive account.</p>
+        
+        <div class="auth-input-group">
+          <input type="email" id="reg-email" placeholder="E-Mail Address" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="auth-input-group">
+          <input type="text" id="reg-user" placeholder="Username" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="auth-input-group">
+          <input type="password" id="reg-pass" placeholder="Password" />
+        </div>
+        <div class="auth-input-group">
+          <input type="password" id="reg-pass-confirm" placeholder="Confirm Password" />
+        </div>
+        
+        <span id="site-reg-msg" class="auth-msg"></span>
+
+        <div class="auth-actions">
+          <button id="site-register-btn" class="auth-action-btn primary">Submit Registration</button>
+          <button id="site-show-login-btn" class="auth-action-btn secondary">Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div id="profile-modal" class="auth-modal-overlay" style="display: none;">
+    <div class="auth-modal-box profile-box" style="width: 450px;">
+      <button id="profile-close-btn" class="auth-close">&times;</button>
+      <div class="profile-header" style="display: flex; align-items: center; gap: 20px; margin-bottom: 25px; text-align: left;">
+        <div class="profile-pic-container" style="position: relative; width: 80px; height: 80px; flex-shrink: 0;">
+          <img id="profile-pic" src="/favicon.ico" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent);" />
+          <div class="profile-pic-edit" style="position: absolute; bottom: -30px; left: -10px; display: flex; gap: 5px; opacity: 1; transition: opacity 0.2s;">
+            <input type="text" id="profile-pic-url" placeholder="URL..." style="width: 70px; padding: 2px; font-size: 0.6rem; background: #000; color: #fff; border: 1px solid var(--border-unlocked);" />
+            <button id="save-pic-btn" style="padding: 2px 5px; font-size: 0.6rem; background: var(--border-unlocked); color: #fff; border: none; cursor: pointer;">Save</button>
+          </div>
+        </div>
+        <h2 class="auth-title" id="profile-username" style="margin: 0; font-size: 2rem;">User</h2>
+      </div>
+      
+      <div class="profile-stats" style="text-align: left; font-size: 0.9rem; line-height: 1.8; color: #c9d1d9; border-top: 1px solid var(--border-locked); border-bottom: 1px solid var(--border-locked); padding: 15px 0; margin-bottom: 20px;">
+        <div class="stat-box"><span>Completed Games:</span> <strong id="stat-completed" style="color: #fff; float: right;">0</strong></div>
+        <div class="stat-box"><span>Tokens Earnt:</span> <strong id="stat-earnt" style="color: #fff; float: right;">0</strong></div>
+        <div class="stat-box"><span>Tokens Spent:</span> <strong id="stat-spent" style="color: #fff; float: right;">0</strong></div>
+        <div class="stat-box"><span>Current Tokens:</span> <strong id="stat-current" style="color: #fff; float: right;">0</strong></div>
+      </div>
+
+      <div class="profile-achievements">
+        <h3 style="color: var(--border-unlocked); margin-bottom: 10px; text-align: left; font-size: 1rem;">Achievements</h3>
+        <ul id="achievements-list" style="list-style: none; padding: 0; margin: 0; text-align: left; max-height: 150px; overflow-y: auto; font-size: 0.8rem; color: #8b949e;">
+          <!-- populated by JS -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <header class="header-box">
+    <h1>CreativeLabs</h1>
+    <p>Pick something. Lose track of time.</p>
+    <div class="header-controls">
+      <span class="tokens">Tokens: <span id="token-count">0</span></span>
+      <label class="sandbox-label">
+        <input type="checkbox" id="sandbox-toggle" />
+        Sandbox Mode
+      </label>
+    </div>
+  </header>
+
+  <main class="tree-wrapper" id="tree">
+    <div class="root-connector"></div>
+    <div id="tree-root"></div>
+  </main>
+
+  <footer class="site-footer">Made with curiosity &amp; too much free time.</footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
