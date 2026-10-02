@@ -1,12 +1,12 @@
 import './style.css'
 
 const GAMES = [
-  { id: 'archive', title: 'The Archive', desc: 'Decrypt 24 vaults.', cost: 0, reward: 50, url: '/games/puzzle/', parent: null, image: '/archive_neal.jpg' },
-  { id: 'base2', title: 'Neon Rider', desc: 'Cyberpunk racing.', cost: 0, reward: 30, url: '#', parent: null, image: '/neonrider_neal.jpg' },
-  { id: 'base3', title: 'Clicker Idle', desc: 'Number goes up.', cost: 0, reward: 20, url: '#', parent: null, image: '/clicker_neal.jpg' },
+  { id: 'archive', title: 'The Archive', desc: 'Decrypt 24 vaults.', cost: 0, reward: 50, url: 'games/puzzle/', parent: null, image: 'archive_neal.jpg' },
+  { id: 'base2', title: 'Neon Rider', desc: 'Cyberpunk racing.', cost: 0, reward: 30, url: '#', parent: null, image: 'neonrider_neal.jpg' },
+  { id: 'base3', title: 'Clicker Idle', desc: 'Number goes up.', cost: 0, reward: 20, url: '#', parent: null, image: 'clicker_neal.jpg' },
 
   // Archive children
-  { id: 'arch_c1', title: 'The Labyrinth', desc: 'Custom maze generator.', cost: 75, reward: 250, url: '/games/maze/index.html', parent: 'archive' },
+  { id: 'arch_c1', title: 'The Labyrinth', desc: 'Custom maze generator.', cost: 75, reward: 250, url: 'games/maze/index.html', parent: 'archive' },
   { id: 'arch_c2', title: 'Deep Web', desc: 'Scrape the depths.', cost: 40, reward: 80, url: '#', parent: 'archive' },
   { id: 'arch_c1_1', title: 'Botnet', desc: 'Control nodes.', cost: 50, reward: 100, url: '#', parent: 'arch_c1' },
   { id: 'arch_c1_2', title: 'Zero Day', desc: 'Find exploits.', cost: 60, reward: 120, url: '#', parent: 'arch_c1' },
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     unlocked: JSON.parse(localStorage.getItem('unlockedGames') || '["archive", "base2", "base3"]'),
     completed: JSON.parse(localStorage.getItem('completedGames') || '[]'),
     achievements: JSON.parse(localStorage.getItem('achievements') || '[]'),
-    profilePic: localStorage.getItem('profilePic') || '/favicon.ico'
+    profilePic: localStorage.getItem('profilePic') || 'favicon.ico'
   };
 
   // Check integration with The Archive
@@ -491,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
   siteUserDisplay.style.cursor = 'pointer';
   siteUserDisplay.addEventListener('click', () => {
     profileUsername.textContent = authUsername || 'Guest';
-    profilePic.src = state.profilePic || '/favicon.ico';
+    profilePic.src = state.profilePic || 'favicon.ico';
     statCompleted.textContent = state.completed.length;
     statEarnt.textContent = state.totalEarned;
     statSpent.textContent = state.totalSpent;
