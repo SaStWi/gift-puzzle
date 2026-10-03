@@ -533,6 +533,10 @@ function render(dt) {
   }
 
   // ── Screen space ────────────────────────────────────────────
+  if (is3D) {
+    // 3D mode doesn't draw to the 2D world canvas, so we must clear it before drawing HUD
+    renderer.ctx.clearRect(0, 0, renderer.logW, renderer.logH);
+  }
   renderer.beginScreen();
 
   drawVignette(ctx, renderer.w, renderer.h);

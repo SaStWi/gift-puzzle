@@ -39,7 +39,6 @@ export class Renderer {
   beginScreen() {
     const d = this.dpr;
     this.ctx.setTransform(d, 0, 0, d, 0, 0);
-    this.ctx.clearRect(0, 0, this.logW, this.logH);
   }
 
   endFrame() { this.ctx.setTransform(1, 0, 0, 1, 0, 0); }
