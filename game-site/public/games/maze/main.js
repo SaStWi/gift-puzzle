@@ -9,15 +9,15 @@ import { ParticleSystem } from './engine/particles.js';
 import { AudioEngine }    from './engine/audio.js';
 import { MazeGenerator }  from './game/generator.js';
 import { Player }         from './game/player.js';
+import { ThreeRenderer } from './game/threeRenderer.js';
 import {
-  drawFloor, drawWall, drawCheckpoint, drawExit,
-  drawPortal, drawKey, drawDoor, drawTrap, drawPlayer,
   drawVignette, drawDeathFlash, drawPortalFlash, drawCpFlash,
-  drawMinimap
+  drawMinimap, drawFloor, drawWall, drawCheckpoint, drawExit, 
+  drawPortal, drawKey, drawTrap, drawDoor, drawPlayer
 } from './game/drawWorld.js';
 
 // ─── Global game state ───────────────────────────────────────
-let renderer, input, camera, particles, audio;
+let renderer, threeRenderer, input, camera, particles, audio;
 let maze, gridW, gridH, wallShape;
 let player;
 let keys = [], checkpoints = [], doors = [], portals = [], traps = [], exit;
@@ -25,6 +25,7 @@ let gameState = 'MENU';  // MENU | PLAY | DEAD | WON
 let globalTime = 0;
 let lastTime   = 0;
 let deathTimer = 0;
+let is3D = true;
 
 // FIX: Offscreen canvas holds pre-rendered static maze (floor + walls)
 let staticCanvas = null;
@@ -61,8 +62,9 @@ document.getElementById('generate-btn').addEventListener('click', () => {
   const diff   = document.getElementById('maze-diff').value;
   const shape  = document.getElementById('maze-shape').value;
   const tile   = parseInt(document.getElementById('path-width').value);
+  const graphicsMode = document.getElementById('maze-graphics').value;
 
-  startGame(sizeM, diff, shape, tile);
+  startGame(sizeM, diff, shape, tile, graphicsMode);
 });
 
 // ─── Minimap Controls ───
@@ -93,10 +95,16 @@ document.getElementById('mm-resize').addEventListener('click', () => {
 });
 
 // ─── Start game ──────────────────────────────────────────────
-function startGame(sizeM, diff, shape, tile) {
+function startGame(sizeM, diff, shape, tile, graphicsMode) {
   // Init engine subsystems
   renderer  = new Renderer(canvas);
+  const threeCanvas = document.getElementById('three-canvas');
+  threeRenderer = new ThreeRenderer(threeCanvas);
   input     = new InputManager();
+  
+  is3D = graphicsMode === '3d';
+  window._is3D = is3D;
+  threeCanvas.style.display = is3D ? 'block' : 'none';
   camera    = new Camera();
   particles = new ParticleSystem();
   audio     = new AudioEngine();
@@ -118,6 +126,9 @@ function startGame(sizeM, diff, shape, tile) {
   portals      = data.portals;
   traps        = data.traps;
 
+  // Build 3D maze
+  threeRenderer.buildMaze(maze, gridW, gridH);
+
   // Store at launch time so winGame can read them reliably (DOM may be hidden)
   _gameDiff  = diff;
   _gameSizeM = sizeM;
@@ -127,7 +138,9 @@ function startGame(sizeM, diff, shape, tile) {
   camera.snap(player.x * tile, player.y * tile);
 
   // Pre-render static maze into offscreen canvas (FPS fix)
-  prerenderStatic(tile);
+  if (!is3D) {
+    prerenderStatic(tile);
+  }
 
   // Show game
   settingsUI.style.display = 'none';
@@ -495,41 +508,29 @@ function resolveWalls() {
 }
 
 // ─── RENDER ──────────────────────────────────────────────────
-function render() {
-  if (!renderer || !staticCanvas) return;
-  const T   = window._TILE;
+function render(dt) {
+  if (!renderer) return;
   const ctx  = renderer.c;
   const cam  = camera;
+  // Render Scene
+  if (threeRenderer && is3D) {
+    threeRenderer.render(player, dt, maze, gridW, gridH, keys, checkpoints, doors, portals, traps, exit, particles);
+  } else if (staticCanvas) {
+    const T = window._TILE;
+    renderer.beginWorld(cam.rx, cam.ry, cam.shakeX, cam.shakeY);
+    ctx.drawImage(staticCanvas, 0, 0);
 
-  renderer.beginWorld(cam.rx, cam.ry, cam.shakeX, cam.shakeY);
-
-  // FIX: Draw pre-rendered static canvas in one blit instead of O(n²) draw calls.
-  // This is the single biggest FPS improvement — eliminates all per-tile wall/floor draws.
-  ctx.drawImage(staticCanvas, 0, 0);
-
-  // 2 — Animated floor entities (on top of static)
-  checkpoints.forEach(cp => drawCheckpoint(ctx, cp, T, globalTime));
-  drawExit(ctx, exit, T, globalTime);
-
-  // 3 — Portals
-  portals.forEach(p => drawPortal(ctx, p, T, globalTime));
-
-  // 4 — Keys (only uncollected)
-  keys.forEach(k => { if (!k.collected) drawKey(ctx, k, T); });
-
-  // 5 — Traps
-  traps.forEach(t => drawTrap(ctx, t, T, globalTime));
-
-  // 6 — Doors (drawn on top of static walls)
-  doors.forEach(d => drawDoor(ctx, d, T, globalTime));
-
-  // 7 — Player
-  if (gameState !== 'DEAD') drawPlayer(ctx, player, T, globalTime);
-
-  // 8 — Particles
-  particles.draw(ctx);
-
-  renderer.endWorld();
+    checkpoints.forEach(cp => drawCheckpoint(ctx, cp, T, globalTime));
+    drawExit(ctx, exit, T, globalTime);
+    portals.forEach(p => drawPortal(ctx, p, T, globalTime));
+    keys.forEach(k => { if (!k.collected) drawKey(ctx, k, T); });
+    traps.forEach(t => drawTrap(ctx, t, T, globalTime));
+    doors.forEach(d => drawDoor(ctx, d, T, globalTime));
+    if (gameState !== 'DEAD') drawPlayer(ctx, player, T, globalTime);
+    
+    particles.draw(ctx);
+    renderer.endWorld();
+  }
 
   // ── Screen space ────────────────────────────────────────────
   renderer.beginScreen();

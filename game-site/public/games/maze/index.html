@@ -6,6 +6,14 @@
   <title>The Labyrinth</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 <body>
 
@@ -55,6 +63,14 @@
           <span class="slider-val" id="width-val">48px</span>
           <span class="slider-hint">Tile pixel size</span>
         </div>
+      </div>
+      <div class="config-item">
+        <label for="maze-graphics">Graphics Mode</label>
+        <select id="maze-graphics">
+          <option value="3d">🎨 Modern 3D</option>
+          <option value="2d">📺 Classic 2D (Top-down)</option>
+        </select>
+        <span class="slider-hint">Switch between the new 3D graphics and the classic 2D view</span>
       </div>
     </div>
 
@@ -141,9 +157,10 @@
     </div>
   </div>
 
-  <canvas id="game-canvas"></canvas>
+  <canvas id="three-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;"></canvas>
+  <canvas id="game-canvas" style="position:relative;z-index:1;background:transparent;"></canvas>
   
-  <div id="minimap-container" class="mm-normal">
+  <div id="minimap-container" class="mm-normal" style="z-index:2;">
     <div class="mm-controls">
       <button id="mm-toggle" title="Toggle Minimap">🗺️</button>
       <button id="mm-resize" title="Resize Minimap">⛶</button>

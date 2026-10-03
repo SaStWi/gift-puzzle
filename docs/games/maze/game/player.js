@@ -68,23 +68,56 @@ export class Player {
     if (this.debuffs.slow > 0) this.speed *= this.debuffs.slowFactor;
     if (this.debuffs.freeze > 0) this.speed *= 0.1; // 90% slow when frozen
 
-    // Normalize diagonal
-    if (dx !== 0 && dy !== 0) { dx *= 0.7071; dy *= 0.7071; }
+    if (window._is3D) {
+      // FPS Tank Controls
+      if (this.debuffs.freeze === 0) {
+        if (dx !== 0) {
+          this.facing += dx * dt * 3.5; // Turn speed
+        }
+        
+        const moveSpeed = -dy * this.speed; // dy=-1 is W (forward)
+        this.vx = Math.cos(this.facing) * moveSpeed;
+        this.vy = Math.sin(this.facing) * moveSpeed;
+        
+        this.moving = (dy !== 0);
 
-    this.vx = dx * this.speed;
-    this.vy = dy * this.speed;
-
-    if (this.moving && this.debuffs.freeze === 0) {
-      this.facing = Math.atan2(dy, dx);
-      this.walkCycle += dt * 9.5 * (this.speed / this.baseSpeed);
-      this.stepTimer  += dt;
-      if (this.stepTimer > 0.21) {
-        this.stepTimer = 0;
-        this.stepAnim  = 1;
+        if (this.moving) {
+          this.walkCycle += dt * 9.5 * (this.speed / this.baseSpeed);
+          this.stepTimer  += dt;
+          if (this.stepTimer > 0.21) {
+            this.stepTimer = 0;
+            this.stepAnim  = 1;
+          }
+        } else {
+          this.walkCycle = 0;
+          this.stepTimer = 0;
+        }
+      } else {
+        this.vx = 0;
+        this.vy = 0;
+        this.moving = false;
       }
     } else {
-      this.walkCycle = 0;
-      this.stepTimer = 0;
+      // Classic Top-Down Controls
+      // Normalize diagonal
+      if (dx !== 0 && dy !== 0) { dx *= 0.7071; dy *= 0.7071; }
+
+      this.vx = dx * this.speed;
+      this.vy = dy * this.speed;
+      this.moving = (dx !== 0 || dy !== 0);
+
+      if (this.moving && this.debuffs.freeze === 0) {
+        this.facing = Math.atan2(dy, dx);
+        this.walkCycle += dt * 9.5 * (this.speed / this.baseSpeed);
+        this.stepTimer  += dt;
+        if (this.stepTimer > 0.21) {
+          this.stepTimer = 0;
+          this.stepAnim  = 1;
+        }
+      } else {
+        this.walkCycle = 0;
+        this.stepTimer = 0;
+      }
     }
 
     this.stepAnim   = Math.max(0, this.stepAnim   - dt * 8);
