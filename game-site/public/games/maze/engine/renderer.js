@@ -5,7 +5,7 @@
 export class Renderer {
   constructor(canvas) {
     this.canvas = canvas;
-    this.ctx = canvas.getContext('2d', { alpha: false });
+    this.ctx = canvas.getContext('2d');
     this.dpr = Math.min(window.devicePixelRatio || 1, 3);
     this.logW = 0; this.logH = 0;
     this._resize();
@@ -25,8 +25,7 @@ export class Renderer {
   beginWorld(cx, cy, shakeX = 0, shakeY = 0) {
     const c = this.ctx, d = this.dpr;
     c.setTransform(d, 0, 0, d, 0, 0);
-    c.fillStyle = '#07080b';
-    c.fillRect(0, 0, this.logW, this.logH);
+    c.clearRect(0, 0, this.logW, this.logH);
     c.save();
     c.translate(
       Math.round(-cx + shakeX + this.logW * 0.5),
@@ -40,6 +39,7 @@ export class Renderer {
   beginScreen() {
     const d = this.dpr;
     this.ctx.setTransform(d, 0, 0, d, 0, 0);
+    this.ctx.clearRect(0, 0, this.logW, this.logH);
   }
 
   endFrame() { this.ctx.setTransform(1, 0, 0, 1, 0, 0); }
