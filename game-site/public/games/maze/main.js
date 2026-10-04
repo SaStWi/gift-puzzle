@@ -476,15 +476,15 @@ function winGame() {
       .then(() => {
         // Small confirmation tick
         console.log(`[Labyrinth] +${tokens} tokens saved.`);
-        setTimeout(() => window.location.href = '/', 4000);
+        setTimeout(() => window.location.href = '../../', 4000);
       })
       .catch(err => {
         // Don't block the win screen if save fails
         console.warn('[Labyrinth] Token save failed:', err);
-        setTimeout(() => window.location.href = '/', 4000);
+        setTimeout(() => window.location.href = '../../', 4000);
       });
   } else {
-    setTimeout(() => window.location.href = '/', 4000);
+    setTimeout(() => window.location.href = '../../', 4000);
   }
 }
 
